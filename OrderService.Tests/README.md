@@ -156,13 +156,17 @@ var options = new DbContextOptionsBuilder<OrderDbContext>()
     .Options;
 ```
 
-## .NET 10 Features Used
+## .NET 10 and C# 14 Features Used
 
-- **ImplicitUsings** - Reduced boilerplate with global usings
-- **Nullable reference types** - Enhanced null safety
-- **Collection expressions** - Modern syntax `[]` for collections
-- **Primary constructors** - Simplified dependency injection
-- **Record types** - Immutable DTOs
+### C# 14 Features
+- **`field` keyword** - Inline validation in property init accessors (used in value objects)
+- **Extension members (`extension` blocks)** - Static extension methods for computed behaviors (see OrderExtensions.cs)
+
+### .NET 10 Features
+- **IHostApplicationBuilder pattern** - Composable service registration
+- **Native OpenAPI support** - Built-in OpenAPI generation
+- **Enhanced Rate Limiting** - Multiple rate limiting policies (Fixed Window, Sliding Window, Token Bucket, Concurrency)
+- **Improved ASP.NET Core integration** - Better middleware and configuration options
 
 ## Test Coverage
 

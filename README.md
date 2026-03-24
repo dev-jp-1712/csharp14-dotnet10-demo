@@ -98,7 +98,7 @@ builder
     .AddInfrastructure()
     .AddApplicationUseCases();
 ```
-📄 **Files:** `src/OrderService/Program.cs`, `src/OrderService/Infrastructure/Extensions/ServiceCollectionExtensions.cs`
+📄 **Files:** `OrderService/Program.cs`, `OrderService/Infrastructure/Extensions/ServiceCollectionExtensions.cs`
 
 ### 3. **Enhanced Rate Limiting**
 Multiple rate limiting algorithms:
@@ -112,14 +112,14 @@ options.AddFixedWindowLimiter("orders", opts => { ... });
 options.AddSlidingWindowLimiter("api", opts => { ... });
 options.AddTokenBucketLimiter("reads", opts => { ... });
 ```
-📄 **File:** `src/OrderService/API/Configuration/RateLimitingConfiguration.cs`
+📄 **File:** `OrderService/API/Configuration/RateLimitingConfiguration.cs`
 
 ---
 
 ## 🔥 C# 14 Features Demonstrated
 
 ### 1. **`field` Keyword - Property Backing Field Access**
-Inline property validation:
+Inline property validation using compiler-generated backing field:
 ```csharp
 public decimal Amount
 {
@@ -129,7 +129,7 @@ public decimal Amount
         : throw new ArgumentOutOfRangeException(nameof(value));
 }
 ```
-📄 **Files:** `src/OrderService/Domain/ValueObjects/Money.cs`, `Address.cs`, `OrderNumber.cs`
+📄 **Files:** `OrderService/Domain/ValueObjects/Money.cs`, `Address.cs`, `OrderNumber.cs`
 
 ### 2. **Extension Members (`extension` keyword)**
 Computed properties without modifying types:
@@ -140,95 +140,57 @@ extension(Order order)
     public string StatusSummary => /* formatted string */;
 }
 ```
-📄 **File:** `src/OrderService/Domain/Extensions/OrderExtensions.cs`
-
-### 3. **Null-Conditional Assignment (`??=`)**
-Assign only if null:
-```csharp
-public void SetTrackingIfMissing(string tracking) =>
-    TrackingNumber ??= tracking;
-```
-📄 **File:** `src/OrderService/Domain/Entities/Order.cs`
-
-### 4. **`nameof` with Unbound Generic Types**
-Type-safe logging:
-```csharp
-logger.LogInformation("Seeding {Entity} data...", nameof(Customer));
-```
-📄 **File:** `src/OrderService/Infrastructure/Persistence/DatabaseSeeder.cs`
-
-### 5. **Partial Members**
-Split member definitions:
-```csharp
-internal sealed partial class OrderWorkflowLogger
-{
-    public partial void LogTransition(string orderNumber, string from, string to);
-}
-```
-📄 **File:** `src/OrderService/Application/Orders/PlaceOrderUseCase.cs`
-
-### 6. **Primary Constructors**
-Simplified dependency injection:
-```csharp
-public sealed class OrdersController(
-    PlaceOrderUseCase placeOrder,
-    PayOrderUseCase payOrder,
-    ...) : ControllerBase
-```
-📄 **Files:** All controllers, use cases, and middleware
+📄 **File:** `OrderService/Domain/Extensions/OrderExtensions.cs`
 
 ---
 
 ## 📁 Project Structure
 
 ```
-CSharp14DotNet10Demo/
-├── src/
-│   └── OrderService/
-│       ├── API/
-│       │   ├── Configuration/
-│       │   │   └── RateLimitingConfiguration.cs    # .NET 10 Rate Limiting
-│       │   ├── Controllers/
-│       │   │   ├── OrdersController.cs             # Order endpoints
-│       │   │   ├── CustomersController.cs
-│       │   │   └── ProductsController.cs
-│       │   └── Middleware/
-│       │       └── ExceptionHandlingMiddleware.cs  # Global error handling
-│       ├── Application/
-│       │   ├── Abstractions/                       # Repository interfaces
-│       │   ├── DTOs/                               # Data transfer objects
-│       │   ├── Mapping/                            # Domain-to-DTO mapping
-│       │   ├── Orders/                             # Order use cases
-│       │   ├── Customers/
-│       │   └── Products/
-│       ├── Domain/
-│       │   ├── Entities/
-│       │   │   ├── Order.cs                        # Aggregate root
-│       │   │   ├── OrderItem.cs
-│       │   │   ├── Customer.cs
-│       │   │   └── Product.cs
-│       │   ├── ValueObjects/
-│       │   │   ├── Money.cs                        # C# 14 field keyword
-│       │   │   ├── Address.cs                      # C# 14 field keyword
-│       │   │   └── OrderNumber.cs                  # C# 14 field keyword
-│       │   ├── Enums/
-│       │   │   └── OrderStatus.cs
-│       │   ├── Exceptions/
-│       │   │   └── DomainExceptions.cs
-│       │   └── Extensions/
-│       │       └── OrderExtensions.cs              # C# 14 extension members
-│       ├── Infrastructure/
-│       │   ├── Persistence/
-│       │   │   ├── OrderDbContext.cs               # EF Core context
-│       │   │   └── DatabaseSeeder.cs               # Sample data
-│       │   ├── Repositories/                       # Repository implementations
-│       │   └── Extensions/
-│       │       └── ServiceCollectionExtensions.cs  # .NET 10 IHostApplicationBuilder
-│       └── Program.cs                              # .NET 10 OpenAPI + Rate Limiting
-└── docs/
-    ├── DotNet10Features.md                         # Rate limiting guide
-    ├── FeaturesSummary.md                          # Complete features reference
-    └── README-DotNet10Implementation.md            # Implementation notes
+OrderService/
+├── OrderService/
+│   ├── API/
+│   │   ├── Configuration/
+│   │   │   └── RateLimitingConfiguration.cs    # .NET 10 Rate Limiting
+│   │   ├── Controllers/
+│   │   │   ├── OrdersController.cs             # Order endpoints
+│   │   │   ├── CustomersController.cs
+│   │   │   └── ProductsController.cs
+│   │   └── Middleware/
+│   │       └── ExceptionHandlingMiddleware.cs  # Global error handling
+│   ├── Application/
+│   │   ├── Abstractions/                       # Repository interfaces
+│   │   ├── DTOs/                               # Data transfer objects
+│   │   ├── Mapping/                            # Domain-to-DTO mapping
+│   │   ├── Orders/                             # Order use cases
+│   │   ├── Customers/
+│   │   └── Products/
+│   ├── Domain/
+│   │   ├── Entities/
+│   │   │   ├── Order.cs                        # Aggregate root
+│   │   │   ├── OrderItem.cs
+│   │   │   ├── Customer.cs
+│   │   │   └── Product.cs
+│   │   ├── ValueObjects/
+│   │   │   ├── Money.cs                        # C# 14 field keyword
+│   │   │   ├── Address.cs                      # C# 14 field keyword
+│   │   │   └── OrderNumber.cs                  # C# 14 field keyword
+│   │   ├── Enums/
+│   │   │   └── OrderStatus.cs
+│   │   ├── Exceptions/
+│   │   │   └── DomainExceptions.cs
+│   │   └── Extensions/
+│   │       └── OrderExtensions.cs              # C# 14 extension members
+│   ├── Infrastructure/
+│   │   ├── Persistence/
+│   │   │   ├── OrderDbContext.cs               # EF Core context
+│   │   │   └── DatabaseSeeder.cs               # Sample data
+│   │   ├── Repositories/                       # Repository implementations
+│   │   └── Extensions/
+│   │       └── ServiceCollectionExtensions.cs  # .NET 10 IHostApplicationBuilder
+│   └── Program.cs                              # .NET 10 OpenAPI + Rate Limiting
+└── OrderService.Tests/
+    └── README.md                                # Testing documentation
 ```
 
 ---
@@ -244,8 +206,8 @@ CSharp14DotNet10Demo/
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/CSharp14DotNet10Demo.git
-   cd CSharp14DotNet10Demo
+   git clone https://github.com/dev-jp-1712/csharp14-dotnet10-demo.git
+   cd csharp14-dotnet10-demo
    ```
 
 2. **Restore dependencies**
@@ -260,7 +222,7 @@ CSharp14DotNet10Demo/
 
 4. **Run the application**
    ```bash
-   dotnet run --project src/OrderService
+   dotnet run --project OrderService
    ```
 
 5. **Open the API documentation**
